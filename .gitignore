@@ -1,0 +1,23 @@
+# Ignore Eclipse workspace settings and cache
+**/.metadata/
+**/.classpath
+**/.project
+**/.settings/
+
+# Ignore build outputs
+target/
+node_modules/
+dist/
+build/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Docker-related temp files
+*.pid
+*.log
+
+# Ignore IDE specific files
+.vscode/
+.idea/
