@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: Asha@2006
       MYSQL_DATABASE: dexpense_db
     ports:
-      - "3307:3306"  
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -18,7 +18,7 @@ services:
     image: jeenepallyadiseshu/springboot-backend:latest
     container_name: springboot
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/dexpense_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/dexpense_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Asha@2006
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
@@ -30,6 +30,8 @@ services:
     restart: on-failure
     networks:
       - springboot-mysql-net
+    # Optional wait-for MySQL to avoid connection refused
+    command: ["sh", "-c", "sleep 10 && java -jar /app/springboot-backend.jar"]
 
   frontend:
     image: jeenepallyadiseshu/react-frontend:latest
@@ -37,7 +39,7 @@ services:
     environment:
       REACT_APP_API_URL: http://backend:2008
     ports:
-      - "5173:80"   
+      - "5173:80"
     depends_on:
       - backend
     restart: on-failure
