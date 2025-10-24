@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mysqldb:
     image: mysql:8
@@ -6,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: Asha@2006
       MYSQL_DATABASE: dexpense_db
     ports:
-      - "3307:3306"
+      - "3307:3306"  
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -15,6 +17,12 @@ services:
   backend:
     image: jeenepallyadiseshu/springboot-backend:latest
     container_name: springboot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/dexpense_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Asha@2006
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 2008
     ports:
       - "2025:2008"
     depends_on:
@@ -26,8 +34,10 @@ services:
   frontend:
     image: jeenepallyadiseshu/react-frontend:latest
     container_name: react
+    environment:
+      REACT_APP_API_URL: http://backend:2008
     ports:
-      - "5173:80"
+      - "5173:80"   
     depends_on:
       - backend
     restart: on-failure
@@ -39,3 +49,4 @@ volumes:
 
 networks:
   springboot-mysql-net:
+    driver: bridge
